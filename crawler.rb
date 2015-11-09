@@ -13,9 +13,9 @@ class Crawler
 
   BaseUrl = "http://blog.nogizaka46.com/"
   # 一番古い月のアーカイブURL
-  LastUrl = "http://blog.nogizaka46.com/?p=0&d=201111"
+  #LastUrl = "http://blog.nogizaka46.com/?p=0&d=201111"
   # TODO: debug
-  #LastUrl = "http://blog.nogizaka46.com/?p=0&d=201510"
+  LastUrl = "http://blog.nogizaka46.com/?p=0&d=201510"
 
   # 日付ddは固定値
   Day = 1
