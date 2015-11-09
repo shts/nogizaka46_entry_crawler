@@ -52,6 +52,9 @@ def fetch(url)
 
 end
 
+fetch("http://blog.nogizaka46.com/manatsu.akimoto/2015/10/025433.php")
+return
+
 # TODO:過去の記事のURLすべてを取得する
 url_arr = Crawler.past_entry_url
 url_arr.each do |url|
