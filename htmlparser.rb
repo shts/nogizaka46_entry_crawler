@@ -25,9 +25,11 @@ class HTMLParser
   def self.fetch(article_url)
     begin
       parse(article_url, Nokogiri::HTML(open(article_url)))
-    rescue OpenURI::HTTPError => ex
+    rescue OpenURI::HTTPError, URI::InvalidURIError => ex
       # 無効なURLは処理をせずnilを返却する
-      puts "HTTPError : #{ex}"
+      puts "******************************************************************************************"
+      puts "HTTPError : article_url(#{article_url}) then #{ex}"
+      puts "******************************************************************************************"
     end
   end
 
@@ -57,7 +59,10 @@ class HTMLParser
     # 拡大画像URLの抽出
     raw_img_url_arr = Array.new()
     doc.css("div.entrybody").css("a").each do |e|
-      raw_img_url_arr.push(e[:href]) if raw_image?(e[:href])
+      # TODO: 改行が挿入されている場合があり、URI::InvalidURIErrorを投げられる可能性があるので改行を取り除く
+      # ex) view-source:http://blog.nogizaka46.com/misa.eto/2015/10/025306.php
+      href = "#{e[:href]}".gsub(/(\r\n|\r|\n|\f)/,"")
+      raw_img_url_arr.push(href) if raw_image?(href)
     end
 
     data = {:author => author,
@@ -131,13 +136,9 @@ class HTMLParser
   #url = "http://dcimg.awalker.jp/img1.php?id=zX28g6c0rXk4CHhwTCXTdJspTKC2wl2d8dMRsFMIJOnrk4KBVfctmlHX3l5SPpPWjBLCTBrJgcZyhYJVTplsxI5Cn4CiSTqeoxsqCdT44r7QmXKNdrWrnR0dMqUEdB9QEwKdV3amly2xLVFBzpVd1mHGXHrYwdhRNiQ6XzJYe2vzrinr8vtpwdv7v304wQAjM3ISnSij"
   #p HTMLParser.enable_url?(url)
   def self.enable_url?(raw_image_url)
-    begin
-      doc = Nokogiri::HTML(open(raw_image_url))
-      # 空の画像が差し込まれていない場合はダウンロード可能URLとする
-      doc.css("img")[0][:src] != "/img/expired.gif"
-    rescue OpenURI::HTTPError => ex
-      puts "Error !!!"
-    end
+    doc = Nokogiri::HTML(open(raw_image_url))
+    # 空の画像が差し込まれていない場合はダウンロード可能URLとする
+    doc.css("img")[0][:src] != "/img/expired.gif"
   end
 
 end

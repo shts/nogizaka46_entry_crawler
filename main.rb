@@ -39,21 +39,23 @@ def fetch(url)
       # 画像アップロードに完了した場合URLの向き先を変更する
       entry[:entrybodyin] = "#{entry[:entrybodyin]}".gsub("#{url_origin}", "#{ret["url"]}")
     }
-    # TODO:Memberテーブルを参照しメンバーを紐付ける
-    query = Parse::Query.new("Member").eq("rss_url", entry[:rss_url])
-    member = query.get.first
-    entry[:author_id] = member['objectId']
-
-    # ParseにEntryオブジェクトを作成する
-    ParseApiClient.insert(entry)
+    # TODO:Net::ReadTimeoutが投げられる可能性があるのでbegin-rescueでリトライする
+    begin
+      # Memberテーブルを参照しメンバーを紐付ける
+      query = Parse::Query.new("Member").eq("rss_url", entry[:rss_url])
+      member = query.get.first
+      entry[:author_id] = member['objectId']
+      # ParseにEntryオブジェクトを作成する
+      ParseApiClient.insert(entry)
+    rescue => e
+      puts "retry insert url -> #{url}"
+      retry
+    end
   else
     puts "entry is nil"
   end
 
 end
-
-fetch("http://blog.nogizaka46.com/manatsu.akimoto/2015/10/025433.php")
-return
 
 # TODO:過去の記事のURLすべてを取得する
 url_arr = Crawler.past_entry_url
