@@ -148,3 +148,5 @@ end
 #arr = "#{data[:yearmonth]}".split('/')
 #puts arr[0]
 #puts arr[1]
+#puts HTMLParser.enable_url?("http://dcimg.awalker.jp/img1.php?id=UpqOKTHBxzwyWBB3OeHuPdH5wFRD9ywCfxE2K3rnT1W15HcFGiPOLSfoqQIv1wAJ2lmLpLCAS3vinOK3j45f2rgFgnWFrx6KJJuKRSXJocAid0aCrFp5B3")
+#puts HTMLParser.fetch("http://blog.nogizaka46.com/seira.nagashima/2013/05/011891.php")

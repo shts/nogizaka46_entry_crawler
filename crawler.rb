@@ -15,14 +15,16 @@ class Crawler
   # 一番古い月のアーカイブURL
   LastUrl = "http://blog.nogizaka46.com/?p=0&d=201111"
   # TODO: debug
-  #LastUrl = "http://blog.nogizaka46.com/?p=0&d=201510"
+  #LastUrl = "http://blog.nogizaka46.com/?p=0&d=201306"
 
   # 日付ddは固定値
   Day = 1
 
   def self.past_entry_url
-    # 本日から2011/11までさかのぼる
+    # TODO:本日から2011/11までさかのぼる
     date = Date.today
+    # TODO:debug
+    #date = Date.new(2013, 7, 1)
     req_url = to_url(date)
 
     url_arr = Array.new()
