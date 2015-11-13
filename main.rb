@@ -62,7 +62,7 @@ end
 arr = Array.new()
 ParseApiClient.all_member_feed { |rss_url|
   XMLParser.parse(rss_url) { |published, url|
-    arr.push(url)
+    puts url
     #if ParseApiClient.is_new?(url) then
     #  fetch(published, url)
     #else
@@ -70,7 +70,6 @@ ParseApiClient.all_member_feed { |rss_url|
     #end
     #fetch(published, url) if ParseApiClient.is_new?(url)
   }
-  puts arr.count
 }
 
 # TODO:過去の記事のURLすべてを取得する
