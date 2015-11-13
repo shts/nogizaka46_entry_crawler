@@ -59,10 +59,10 @@ def fetch(published, url)
 
 end
 
-arr = Array.new()
+counter = 0
 ParseApiClient.all_member_feed { |rss_url|
   XMLParser.parse(rss_url) { |published, url|
-    puts url
+    counter = counter + 1
     #if ParseApiClient.is_new?(url) then
     #  fetch(published, url)
     #else
@@ -71,6 +71,7 @@ ParseApiClient.all_member_feed { |rss_url|
     #fetch(published, url) if ParseApiClient.is_new?(url)
   }
 }
+puts counter
 
 # TODO:過去の記事のURLすべてを取得する
 #url_arr = Crawler.past_entry_url
