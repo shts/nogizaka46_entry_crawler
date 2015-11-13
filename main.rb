@@ -70,9 +70,8 @@ ParseApiClient.all_member_feed { |rss_url|
     #end
     #fetch(published, url) if ParseApiClient.is_new?(url)
   }
+  puts arr.count
 }
-
-puts arr.count
 
 # TODO:過去の記事のURLすべてを取得する
 #url_arr = Crawler.past_entry_url
