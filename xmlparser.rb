@@ -9,18 +9,19 @@ require 'rexml/document'
 
 class XMLParser
 
-  def self.parse
-
+  def self.parse(url)
     # RSSフィードを取得する
-    url = 'http://blog.nogizaka46.com/atom.xml'
+    #url = 'http://blog.nogizaka46.com/atom.xml'
     xml = open(url)
 
     # 取得したフィード(XML)の読み込み
     doc = REXML::Document.new(open(xml))
 
     # 解析する
-    doc.elements.each('feed/entry') do |element|
-      yield(element)
+    doc.elements.each('feed/entry') do |e|
+      published = e.elements['published'].text
+      url = e.elements['link'].attribute('href')
+      yield("#{published}", "#{url}")
     end
 
   end

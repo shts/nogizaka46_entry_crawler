@@ -47,15 +47,17 @@ class ParseApiClient
     #entry['yearmonth'] = data[:yearmonth]
     #entry['dd1'] = data[:dd1]
     #entry['dd2'] = data[:dd2]
-    # TODO: メンバーIDとの紐付をする
+    # ソート用
+    published = DateTime.parse(data[:published])
+    entry['published'] = Parse::Date.new(published)
     # 検索用
     arr = data[:yearmonth].split('/')
     entry['year'] = arr[0]
     entry['month'] = arr[1]
     entry['day'] = data[:dd1]
     entry['dayweek'] = data[:dd2]
-    #date = Date.new("#{arr[0]}".to_i, "#{arr[1]}".to_i, "#{entry[:dd1]}".to_i)
-    #entry['date'] = date
+    date_time = DateTime.new("#{arr[0]}".to_i, "#{arr[1]}".to_i ,"#{data[:dd1]}".to_i, 0, 0, 0, 0)
+    entry['date'] = Parse::Date.new(date_time)
     # originalを接頭
     entry['original_thumbnail_url'] = data[:thumbnail_url_arr]
     entry['original_raw_img_url'] = data[:raw_img_url_arr]
@@ -76,6 +78,17 @@ class ParseApiClient
       :content_type => "image/jpeg"
     })
     photo.save
+  end
+
+  def self.all_member_feed
+    query = Parse::Query.new("Member")
+    query.get.each { |member|
+      yield(member['rss_url'])
+    }
+  end
+
+  def self.is_new?(url)
+    Parse::Query.new("Entry").eq("url", url).get.first == nil
   end
 
 end

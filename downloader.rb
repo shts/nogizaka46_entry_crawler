@@ -34,9 +34,9 @@ class Downloader
 
       # TODO:enable at heroku?
       FileUtils.mkdir_p(Dirname) unless FileTest.exist?(Dirname)
-
+      # open(url, 'User-Agent' => 'ruby')
       open(file_path, 'wb') do |output|
-        open(url) do |data|
+        open(url, 'User-Agent' => 'ruby') do |data|
           output.write(data.read)
           yield(url, file_name)
         end

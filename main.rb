@@ -2,25 +2,27 @@
 # プログラムを定期実行するためのライブラリを読み込む
 require 'eventmachine'
 # データベースにアクセスするためのライブラリを読み込む
-require 'sinatra/activerecord'
+#require 'sinatra/activerecord'
 
 require_relative 'htmlparser'
 require_relative 'downloader'
 require_relative 'parseapiclient'
 require_relative 'crawler'
+require_relative 'xmlparser'
 
 # TODO: for local
 #ActiveRecord::Base.configurations = YAML.load_file('database.yml')
 #ActiveRecord::Base.establish_connection(:development)
-ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
+#ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
 
-class Entries < ActiveRecord::Base; end
+#class Entries < ActiveRecord::Base; end
 
-def fetch(url)
+def fetch(published, url)
 
   entry = HTMLParser.fetch(url)
 
   if entry != nil then
+    entry[:published] = published
     entry[:uploaded_thumbnail_url] = Array.new()
     entry[:uploaded_raw_image_url] = Array.new()
     entry[:uploaded_thumbnail_file_name] = Array.new()
@@ -57,21 +59,35 @@ def fetch(url)
 
 end
 
+ParseApiClient.all_member_feed { |rss_url|
+  XMLParser.parse(rss_url) { |published, url|
+    if ParseApiClient.is_new?(url) then
+      puts "new !"
+      puts published
+      puts url
+      fetch(published, url)
+    else
+      puts "already"
+    end
+    #fetch(published, url) if ParseApiClient.is_new?(url)
+  }
+}
+
 # TODO:過去の記事のURLすべてを取得する
-url_arr = Crawler.past_entry_url
-url_arr.each do |url|
-  # 10000件が上限なので9500を超えた場合は古いレコードを削除する
-  if Entries.count >= 9500
-    Entries.first.delete
-  end
-  # URLをDBに保存
-  Entries.where(:url => url).first_or_create do |e|
-    puts "new record -> #{e}"
-    # 各URLをパースしてDBへ保存する
-    # とりあえずDBに格納して上限になったらどうなるか調査
-    fetch(url)
-  end
-end
+#url_arr = Crawler.past_entry_url
+#url_arr.each do |url|
+#  # 10000件が上限なので9500を超えた場合は古いレコードを削除する
+#  if Entries.count >= 9500
+#    Entries.first.delete
+#  end
+#  # URLをDBに保存
+#  Entries.where(:url => url).first_or_create do |e|
+#    puts "new record -> #{e}"
+#    # 各URLをパースしてDBへ保存する
+#    # とりあえずDBに格納して上限になったらどうなるか調査
+#    fetch(url)
+#  end
+#end
 
 # TODO:新着を記事を監視する
 #EM.run do
