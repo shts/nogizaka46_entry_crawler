@@ -59,19 +59,14 @@ def fetch(published, url)
 
 end
 
-counter = 0
-ParseApiClient.all_member_feed { |rss_url|
-  XMLParser.parse(rss_url) { |published, url|
-    counter = counter + 1
-    #if ParseApiClient.is_new?(url) then
-    #  fetch(published, url)
-    #else
-    #  puts "already"
-    #end
-    #fetch(published, url) if ParseApiClient.is_new?(url)
+# routineタスク
+def routine
+  ParseApiClient.all_member_feed { |rss_url|
+    XMLParser.parse(rss_url) { |published, url|
+      fetch(published, url) if ParseApiClient.is_new?(url)
+    }
   }
-}
-puts counter
+end
 
 # TODO:過去の記事のURLすべてを取得する
 #url_arr = Crawler.past_entry_url
@@ -89,15 +84,11 @@ puts counter
 #  end
 #end
 
+routine
+
 # TODO:新着を記事を監視する
-#EM.run do
-#  EM::PeriodicTimer.new(60) do
-#    XMLParser.parse { |element|
-#      puts "routine task start"
-#      url = element.elements['link'].attribute('href')
-#      Articles.where(:url => url).first_or_create do |e|
-#        fetch(url)
-#      end
-#    }
-#  end
-#end
+EM.run do
+  EM::PeriodicTimer.new(60) do
+    routine
+  end
+end
