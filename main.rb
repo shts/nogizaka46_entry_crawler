@@ -59,19 +59,20 @@ def fetch(published, url)
 
 end
 
+arr = Array.new()
 ParseApiClient.all_member_feed { |rss_url|
   XMLParser.parse(rss_url) { |published, url|
-    if ParseApiClient.is_new?(url) then
-      puts "new !"
-      puts published
-      puts url
-      fetch(published, url)
-    else
-      puts "already"
-    end
+    arr.push(url)
+    #if ParseApiClient.is_new?(url) then
+    #  fetch(published, url)
+    #else
+    #  puts "already"
+    #end
     #fetch(published, url) if ParseApiClient.is_new?(url)
   }
 }
+
+puts arr.count
 
 # TODO:過去の記事のURLすべてを取得する
 #url_arr = Crawler.past_entry_url
