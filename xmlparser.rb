@@ -23,7 +23,6 @@ class XMLParser
       url = e.elements['link'].attribute('href')
       yield("#{published}", "#{url}")
     end
-
   end
 
 end

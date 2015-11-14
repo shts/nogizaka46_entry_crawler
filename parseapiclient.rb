@@ -28,7 +28,7 @@ Parse.init :application_id => ENV['PARSE_APP_ID'],
 
 class ParseApiClient
 
-  def self.push(entry)
+  def self.push(objectId)
   end
 
   def self.insert(data)
@@ -66,7 +66,8 @@ class ParseApiClient
     entry['uploaded_raw_image_url'] = data[:uploaded_raw_image_url]
     entry['uploaded_thumbnail_file_name'] = data[:uploaded_thumbnail_file_name]
     entry['uploaded_raw_image_file_name'] = data[:uploaded_raw_image_file_name]
-    puts entry.save
+    entry.save
+    puts entry['objectId']
   end
 
   def self.upload_photo(dirname, filename)

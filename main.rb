@@ -59,8 +59,7 @@ def fetch(published, url)
 
 end
 
-# routineタスク
-def routine
+def get_all_entry
   ParseApiClient.all_member_feed { |rss_url|
     XMLParser.parse(rss_url) { |published, url|
       fetch(published, url) if ParseApiClient.is_new?(url)
@@ -84,11 +83,13 @@ end
 #  end
 #end
 
-routine
+get_all_entry
 
 # TODO:新着を記事を監視する
 EM.run do
   EM::PeriodicTimer.new(60) do
-    routine
+    XMLParser.parse("http://blog.nogizaka46.com/atom.xml") { |published, url|
+      fetch(published, url) if ParseApiClient.is_new?(url)
+    }
   end
 end
