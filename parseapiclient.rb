@@ -28,9 +28,6 @@ Parse.init :application_id => ENV['PARSE_APP_ID'],
 
 class ParseApiClient
 
-  def self.push(objectId)
-  end
-
   def self.insert(data)
     #player_profile = Parse::Object.new("PlayerProfile")
     #player_profile['score'] = 12
@@ -66,8 +63,14 @@ class ParseApiClient
     entry['uploaded_raw_image_url'] = data[:uploaded_raw_image_url]
     entry['uploaded_thumbnail_file_name'] = data[:uploaded_thumbnail_file_name]
     entry['uploaded_raw_image_file_name'] = data[:uploaded_raw_image_file_name]
-    entry.save
-    puts entry['objectId']
+    puts entry.save
+
+    # Push
+    data = { :action=> "android.shts.jp.nogifeed.UPDATE_STATUS",
+             :_objectId => entry['objectId'].to_s }
+    push = Parse::Push.new(data)
+    push.where = { :deviceType => "android" }
+    puts push.save
   end
 
   def self.upload_photo(dirname, filename)

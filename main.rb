@@ -62,16 +62,12 @@ end
 def get_all_entry
   ParseApiClient.all_member_feed { |rss_url|
     XMLParser.parse(rss_url) { |published, url|
+      sleep 1
       fetch(published, url) if ParseApiClient.is_new?(url)
     }
   }
 end
 
-testObject = Parse::Object.new("Test")
-testObject['hoge'] = "hoge"
-testObject.save
-puts testObject['objectId']
-return
 # TODO:過去の記事のURLすべてを取得する
 #url_arr = Crawler.past_entry_url
 #url_arr.each do |url|
