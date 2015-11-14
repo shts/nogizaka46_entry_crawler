@@ -49,8 +49,8 @@ def fetch(published, url)
       entry[:author_id] = member['objectId']
       # ParseにEntryオブジェクトを作成する
       ParseApiClient.insert(entry)
-    rescue => e
-      puts "retry insert url -> #{url}"
+    rescue Net::ReadTimeout => e
+      puts "Error ! #{e} ¥n retry insert url -> #{url}"
       retry
     end
   else
