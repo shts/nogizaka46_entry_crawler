@@ -47,6 +47,8 @@ def fetch(published, url)
       query = Parse::Query.new("Member").eq("rss_url", entry[:rss_url])
       member = query.get.first
       entry[:author_id] = member['objectId']
+      entry[:author_image_url] = member['image_url']
+      entry[:author_name] = member['name_main']
       # ParseにEntryオブジェクトを作成する
       ParseApiClient.insert(entry)
     rescue Net::ReadTimeout => e
