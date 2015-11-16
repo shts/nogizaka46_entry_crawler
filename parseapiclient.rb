@@ -37,6 +37,7 @@ class ParseApiClient
     entry['url'] = data[:article_url]
     entry['author'] = data[:author]
     entry['author_id'] = data[:author_id]
+    entry['author_image_url'] = data[:author_image_url]
     entry['title'] = data[:entrytitle]
     entry['body'] = data[:entrybodyin]
 
