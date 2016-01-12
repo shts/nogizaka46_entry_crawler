@@ -54,6 +54,7 @@ class HTMLParser
     # サムネイル画像URLの抽出
     thumbnail_url_arr = Array.new()
     doc.css("div.entrybody").css("img").each do |e|
+      puts "e[:src] -> #{e[:src]}"
       thumbnail_url_arr.push(e[:src]) if thumbnail?(e[:src])
     end
     # 拡大画像URLの抽出
