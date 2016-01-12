@@ -85,13 +85,7 @@ end
 #  end
 #end
 
-# for debug
-XMLParser.parse("http://blog.nogizaka46.com/rena.yamazaki/atom.xml") { |published, url|
-  sleep 1
-  fetch(published, url) if ParseApiClient.is_new?(url)
-}
-
-#get_all_entry
+get_all_entry
 
 # TODO:新着を記事を監視する
 EM.run do

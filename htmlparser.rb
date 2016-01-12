@@ -54,7 +54,6 @@ class HTMLParser
     # サムネイル画像URLの抽出
     thumbnail_url_arr = Array.new()
     doc.css("div.entrybody").css("img").each do |e|
-      puts "e[:src] -> #{e[:src]}"
       thumbnail_url_arr.push(e[:src]) if thumbnail?(e[:src])
     end
     # 拡大画像URLの抽出
@@ -118,12 +117,14 @@ class HTMLParser
   #end
 
   def self.thumbnail?(url)
+    # nilの場合もあるのでチェックする
     # .gifファイルは無視する
-    url.start_with?("http://img.nogizaka46.com/") && !url.end_with?(".gif")
+    url.start_with?("http://img.nogizaka46.com/") && !url.end_with?(".gif") if url != nil
   end
 
   def self.raw_image?(url)
-    url.start_with?("http://dcimg.awalker.jp/") && enable_url?(url)
+    # nilの場合もあるのでチェックする
+    url.start_with?("http://dcimg.awalker.jp/") && enable_url?(url) if url != nil
   end
 
   # 期限切れURL
