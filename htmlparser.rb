@@ -26,6 +26,13 @@ class HTMLParser
     begin
       parse(article_url, Nokogiri::HTML(open(article_url)))
     rescue OpenURI::HTTPError, URI::InvalidURIError => ex
+      if ex == OpenURI::HTTPError then
+        puts "******************************************************************************************"
+        puts "HTTPError : article_url(#{article_url}) then #{ex} with retry!!!"
+        puts "******************************************************************************************"
+        sleep 5
+        retry
+      end
       # 無効なURLは処理をせずnilを返却する
       puts "******************************************************************************************"
       puts "HTTPError : article_url(#{article_url}) then #{ex}"

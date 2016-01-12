@@ -75,14 +75,22 @@ class ParseApiClient
   end
 
   def self.upload_photo(dirname, filename)
-    photo = Parse::File.new({
-      # バイナリモードとして読み込む必要がある
-      # http://qiita.com/kimitaka@github/items/f50fc3cea8243d1125a9
-      :body => File.binread("#{dirname}#{filename}"),
-      :local_filename => filename,
-      :content_type => "image/jpeg"
-    })
-    photo.save
+    begin
+      photo = Parse::File.new({
+        # バイナリモードとして読み込む必要がある
+        # http://qiita.com/kimitaka@github/items/f50fc3cea8243d1125a9
+        :body => File.binread("#{dirname}#{filename}"),
+        :local_filename => filename,
+        :content_type => "image/jpeg"
+      })
+      photo.save
+    rescue Parse::FileSaveError => ex
+      sleep 5
+      puts "*****************************************"
+      puts "Failed to upload ex->#{ex} with retry!!!"
+      puts "*****************************************"
+      retry
+    end
   end
 
   def self.all_member_feed
