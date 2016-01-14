@@ -64,11 +64,16 @@ class ParseApiClient
     entry['uploaded_raw_image_url'] = data[:uploaded_raw_image_url]
     entry['uploaded_thumbnail_file_name'] = data[:uploaded_thumbnail_file_name]
     entry['uploaded_raw_image_file_name'] = data[:uploaded_raw_image_file_name]
-    puts entry.save
+    result = entry.save
 
     # Push
     data = { :action=> "android.shts.jp.nogifeed.UPDATE_STATUS",
-             :_objectId => entry['objectId'].to_s }
+             :_entryObjectId => result['objectId'],
+             :_title => entry['title'],
+             :_author => entry['author'],
+             :_author_id => entry['author_id'],
+             :_author_image_url => entry['author_image_url'],
+          }
     push = Parse::Push.new(data)
     push.where = { :deviceType => "android" }
     puts push.save
