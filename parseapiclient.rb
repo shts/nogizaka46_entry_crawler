@@ -28,7 +28,7 @@ Parse.init :application_id => ENV['PARSE_APP_ID'],
 
 class ParseApiClient
 
-  def self.insert(data)
+  def self.insert(data, needpush)
     #player_profile = Parse::Object.new("PlayerProfile")
     #player_profile['score'] = 12
     #puts player_profile.save
@@ -65,6 +65,9 @@ class ParseApiClient
     entry['uploaded_thumbnail_file_name'] = data[:uploaded_thumbnail_file_name]
     entry['uploaded_raw_image_file_name'] = data[:uploaded_raw_image_file_name]
     result = entry.save
+
+    puts "needpush? -> #{needpush}"
+    return if !needpush
 
     # Push
     data = { :action=> "android.shts.jp.nogifeed.UPDATE_STATUS",

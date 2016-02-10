@@ -17,7 +17,7 @@ require_relative 'xmlparser'
 
 #class Entries < ActiveRecord::Base; end
 
-def fetch(published, url)
+def fetch(published, url, needpush)
 
   entry = HTMLParser.fetch(url)
 
@@ -49,7 +49,7 @@ def fetch(published, url)
       entry[:author_id] = member['objectId']
       entry[:author_image_url] = member['image_url']
       # ParseにEntryオブジェクトを作成する
-      ParseApiClient.insert(entry)
+      ParseApiClient.insert(entry, needpush)
     rescue Net::ReadTimeout => e
       puts "Error ! #{e} ¥n retry insert url -> #{url}"
       retry
@@ -64,7 +64,7 @@ def get_all_entry
   ParseApiClient.all_member_feed { |rss_url|
     XMLParser.parse(rss_url) { |published, url|
       sleep 1
-      fetch(published, url) if ParseApiClient.is_new?(url)
+      fetch(published, url, false) if ParseApiClient.is_new?(url)
     }
   }
 end
@@ -91,7 +91,7 @@ get_all_entry
 EM.run do
   EM::PeriodicTimer.new(60) do
     XMLParser.parse("http://blog.nogizaka46.com/atom.xml") { |published, url|
-      fetch(published, url) if ParseApiClient.is_new?(url)
+      fetch(published, url, true) if ParseApiClient.is_new?(url)
     }
   end
 end
