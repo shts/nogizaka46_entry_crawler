@@ -10,18 +10,27 @@ require 'rexml/document'
 class XMLParser
 
   def self.parse(url)
-    # RSSフィードを取得する
-    #url = 'http://blog.nogizaka46.com/atom.xml'
-    xml = open(url)
+    begin
+      # RSSフィードを取得する
+      #url = 'http://blog.nogizaka46.com/atom.xml'
+      puts "url -> #{url}"
+      xml = open(url, 'User-Agent' => 'ruby')
 
-    # 取得したフィード(XML)の読み込み
-    doc = REXML::Document.new(open(xml))
+      # 取得したフィード(XML)の読み込み
+      doc = REXML::Document.new(open(xml))
 
-    # 解析する
-    doc.elements.each('feed/entry') do |e|
-      published = e.elements['published'].text
-      url = e.elements['link'].attribute('href')
-      yield("#{published}", "#{url}")
+      # 解析する
+      doc.elements.each('feed/entry') do |e|
+        published = e.elements['published'].text
+        url = e.elements['link'].attribute('href')
+        yield("#{published}", "#{url}")
+      end
+    rescue OpenURI::HTTPError => ex
+      sleep 5
+      puts "*****************************************"
+      puts "Failed to upload ex->#{ex} with retry!!!"
+      puts "*****************************************"
+      retry
     end
   end
 
