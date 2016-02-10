@@ -26,7 +26,7 @@ class XMLParser
         yield("#{published}", "#{url}")
       end
     rescue OpenURI::HTTPError => ex
-      if e.message == '404 Not Found' then
+      if ex.message == '404 Not Found' then
         # ありえないケース.公式ブログのバグ
         # TODO: メールで通知したい
       else
