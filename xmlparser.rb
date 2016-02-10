@@ -26,11 +26,16 @@ class XMLParser
         yield("#{published}", "#{url}")
       end
     rescue OpenURI::HTTPError => ex
-      sleep 5
-      puts "*****************************************"
-      puts "Failed to upload ex->#{ex} with retry!!!"
-      puts "*****************************************"
-      retry
+      if e.message == '404 Not Found' then
+        # ありえないケース公式ブログのバグ
+        # TODO: メールで通知したい
+      else
+        sleep 5
+        puts "*****************************************"
+        puts " HTTPError ex->#{ex} with retry!!!"
+        puts "*****************************************"
+        retry
+      end
     end
   end
 
