@@ -27,7 +27,7 @@ class XMLParser
       end
     rescue OpenURI::HTTPError => ex
       if e.message == '404 Not Found' then
-        # ありえないケース公式ブログのバグ
+        # ありえないケース.公式ブログのバグ
         # TODO: メールで通知したい
       else
         sleep 5
