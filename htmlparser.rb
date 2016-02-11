@@ -24,7 +24,7 @@ class HTMLParser
 
   def self.fetch(article_url)
     begin
-      parse(article_url, Nokogiri::HTML(open(article_url)))
+      parse(article_url, Nokogiri::HTML(open(article_url, 'User-Agent' => 'ruby')))
     rescue OpenURI::HTTPError, URI::InvalidURIError => ex
       if ex == OpenURI::HTTPError then
         puts "******************************************************************************************"
