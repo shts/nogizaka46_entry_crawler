@@ -24,7 +24,7 @@ class XMLParser
         url = e.elements['link'].attribute('href')
         yield("#{published}", "#{url}")
       end
-    rescue OpenURI::HTTPError => ex
+    rescue OpenURI::HTTPError, REXML::Attribute => ex
       if ex.message == '404 Not Found' then
         # ありえないケース.公式ブログのバグ
         # TODO: メールで通知したい
