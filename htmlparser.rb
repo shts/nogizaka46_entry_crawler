@@ -25,7 +25,7 @@ class HTMLParser
   def self.fetch(article_url)
     begin
       user_agent = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36'
-      html = open(url, 'User-Agent' => user_agent)
+      html = open(article_url, 'User-Agent' => user_agent)
       parse(article_url, Nokogiri::HTML(html))
     rescue OpenURI::HTTPError, URI::InvalidURIError => ex
       if ex == OpenURI::HTTPError then
