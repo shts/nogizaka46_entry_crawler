@@ -25,13 +25,21 @@ class XMLParser
         yield("#{published}", "#{url}")
       end
     rescue OpenURI::HTTPError, REXML::Attribute => ex
-      if ex.message == '404 Not Found' then
-        # ありえないケース.公式ブログのバグ
-        # TODO: メールで通知したい
-      else
+      if ex == OpenURI::HTTPError then
+        if ex.message == '404 Not Found' then
+          # ありえないケース.公式ブログのバグ
+          # TODO: メールで通知したい
+        else
+          sleep 5
+          puts "*****************************************"
+          puts " HTTPError ex-> #{ex.message} with retry!!!"
+          puts "*****************************************"
+          retry
+        end
+      elsif ex == REXML::Attribute then
         sleep 5
         puts "*****************************************"
-        puts " HTTPError ex-> #{ex.message} with retry!!!"
+        puts " REXML::Attribute ex-> #{ex.message}"
         puts "*****************************************"
         retry
       end
