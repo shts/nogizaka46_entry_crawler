@@ -14,7 +14,8 @@ class XMLParser
       # RSSフィードを取得する
       #url = 'http://blog.nogizaka46.com/atom.xml'
       puts "url -> #{url}"
-      xml = open(url, 'User-Agent' => 'ruby')
+      user_agent = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36'
+      xml = open(url, 'User-Agent' => user_agent)
 
       # 取得したフィード(XML)の読み込み
       doc = REXML::Document.new(open(xml))
@@ -32,7 +33,7 @@ class XMLParser
       else
         sleep 5
         puts "*****************************************"
-        puts " HTTPError ex->#{ex} with retry!!!"
+        puts " HTTPError ex-> #{ex} with retry!!!"
         puts "*****************************************"
         retry
       end
