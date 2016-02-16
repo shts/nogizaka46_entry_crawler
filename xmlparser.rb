@@ -7,19 +7,17 @@ require 'open-uri'
 # XMLをパースするためのライブラリを読み込む
 require 'rexml/document'
 
+require 'useragent'
+
 class XMLParser
 
   def self.parse(url)
     begin
       # RSSフィードを取得する
       #url = 'http://blog.nogizaka46.com/atom.xml'
-      puts "url -> #{url}"
-      user_agent = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36'
-      xml = open(url, 'User-Agent' => user_agent)
-
+      xml = open(url, 'User-Agent' => UserAgents.agent)
       # 取得したフィード(XML)の読み込み
       doc = REXML::Document.new(open(xml))
-
       # 解析する
       doc.elements.each('feed/entry') do |e|
         published = e.elements['published'].text
@@ -33,7 +31,7 @@ class XMLParser
       else
         sleep 5
         puts "*****************************************"
-        puts " HTTPError ex-> #{ex} with retry!!!"
+        puts " HTTPError ex-> #{ex.message} with retry!!!"
         puts "*****************************************"
         retry
       end

@@ -5,6 +5,8 @@ require 'open-uri'
 # HTMLをパースするためのライブラリを読み込む
 require 'nokogiri'
 
+require 'useragent'
+
 # <td class="date"><span class="yearmonth">2015/10</span> <span class="daydate"> <span class="dd1">19</span> <span class="dd2">Mon</span> </span></td>
 # <td class="heading"><span class="author">樋口日奈</span> <span class="entrytitle"><a href="#comments-open" onclick="$('#comments').fadeIn();" style="text-decoration:none;">日だまりのお部屋468 *ひなちま</a></span></td>
 
@@ -24,20 +26,19 @@ class HTMLParser
 
   def self.fetch(article_url)
     begin
-      user_agent = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36'
-      html = open(article_url, 'User-Agent' => user_agent)
+      html = open(article_url, 'User-Agent' => UserAgents.agent)
       parse(article_url, Nokogiri::HTML(html))
     rescue OpenURI::HTTPError, URI::InvalidURIError => ex
       if ex == OpenURI::HTTPError then
         puts "******************************************************************************************"
-        puts "HTTPError : article_url(#{article_url}) then #{ex} with retry!!!"
+        puts "HTTPError : article_url(#{article_url}) then #{ex.message} with retry!!!"
         puts "******************************************************************************************"
         sleep 5
         retry
       end
       # 無効なURLは処理をせずnilを返却する
       puts "******************************************************************************************"
-      puts "HTTPError : article_url(#{article_url}) then #{ex}"
+      puts "HTTPError : article_url(#{article_url}) then #{ex.message}"
       puts "******************************************************************************************"
     end
   end
