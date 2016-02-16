@@ -14,7 +14,7 @@ class UserAgents
   ]
 
   def self.agent
-    AGENTS.choice
+    AGENTS[rand(AGENTS.length)]
   end
 
 end
