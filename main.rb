@@ -85,7 +85,7 @@ end
 #  end
 #end
 
-get_all_entry
+#get_all_entry
 
 # TODO:新着を記事を監視する
 EM.run do
