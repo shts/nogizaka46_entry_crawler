@@ -5,7 +5,7 @@ require 'open-uri'
 # HTMLをパースするためのライブラリを読み込む
 require 'nokogiri'
 
-require 'useragent'
+require_relative 'useragent'
 
 # <td class="date"><span class="yearmonth">2015/10</span> <span class="daydate"> <span class="dd1">19</span> <span class="dd2">Mon</span> </span></td>
 # <td class="heading"><span class="author">樋口日奈</span> <span class="entrytitle"><a href="#comments-open" onclick="$('#comments').fadeIn();" style="text-decoration:none;">日だまりのお部屋468 *ひなちま</a></span></td>

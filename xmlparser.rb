@@ -7,7 +7,7 @@ require 'open-uri'
 # XMLをパースするためのライブラリを読み込む
 require 'rexml/document'
 
-require 'useragent'
+require_relative 'useragent'
 
 class XMLParser
 
