@@ -90,8 +90,10 @@ end
 # TODO:新着を記事を監視する
 EM.run do
   EM::PeriodicTimer.new(60) do
+    puts "routine work start..."
     XMLParser.parse("http://blog.nogizaka46.com/atom.xml") { |published, url|
       fetch(published, url, true) if ParseApiClient.is_new?(url)
     }
+    puts "routine work finish !!!"
   end
 end
