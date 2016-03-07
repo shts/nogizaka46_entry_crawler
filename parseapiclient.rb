@@ -80,6 +80,21 @@ class ParseApiClient
     push = Parse::Push.new(data)
     push.where = { :deviceType => "android" }
     puts push.save
+
+    # 別Versionのアプリに通知する
+    data2 = { :action=> "android.shts.jp.nogifeed.UPDATE_STATUS2",
+             :_entryObjectId => result['objectId'],
+             :_url => entry['url'],
+             :_title => entry['title'],
+             :_author => entry['author'],
+             :_author_id => entry['author_id'],
+             :_author_image_url => entry['author_image_url'],
+             :_uploaded_thumbnail_url => entry['uploaded_thumbnail_url'],
+             :_uploaded_raw_image_url => entry['uploaded_raw_image_url'],
+          }
+    push2 = Parse::Push.new(data2)
+    push2.where = { :deviceType => "android" }
+    puts push2.save
   end
 
   def self.upload_photo(dirname, filename)
